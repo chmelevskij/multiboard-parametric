@@ -1,10 +1,12 @@
+/* [Main Parameters] */
 x_cells = 8;
 y_cells = 6;
+num_stacked_tiles = 3;
 type = "core"; // side or corner
 
 // eps = 0.01;
 
-// Main dimensions
+/* [Dimensions] */
 cell_size = 25;
 height = 6.4;
 
@@ -15,6 +17,8 @@ hole_thin = 1.6;
 hole_rg_spiral_d=0.776;
 
 hole_sm_d = 6.069+0.025; // 7.5;
+
+stack_gap = 0.25; // Default gap between stacked tiles in mm
 
 // Single tile outer dimensions
 side_l = cell_size/(1+2*cos(45));
@@ -339,14 +343,29 @@ module trapz_thread(d1, d2, h1, h2, thread_len, pitch) {
 }
 
 
+
+// New module for creating stacked tiles
+module stacked_multiboard(type, x_cells, y_cells, num_tiles, gap) {
+    total_height = num_tiles * height + (num_tiles - 1) * gap;
+    
+    for (i = [0:num_tiles-1]) {
+        translate([0, 0, i * (height + gap)]) {
+            if (type == "core") {
+                multiboard_core(x_cells, y_cells);
+            } else if (type == "side") {
+                multiboard_side(x_cells, y_cells);
+            } else if (type == "corner") {
+                multiboard_corner(x_cells, y_cells);
+            }
+        }
+    }
+}
+
+// Modified rendering section
 if (type == "core") {
-    multiboard_core(x_cells, y_cells);
-}
-
-if (type == "side") {
-    multiboard_side(x_cells, y_cells);
-}
-
-if (type == "corner") {
-    multiboard_corner(x_cells, y_cells);
+    stacked_multiboard("core", x_cells, y_cells, num_stacked_tiles, stack_gap);
+} else if (type == "side") {
+    stacked_multiboard("side", x_cells, y_cells, num_stacked_tiles, stack_gap);
+} else if (type == "corner") {
+    stacked_multiboard("corner", x_cells, y_cells, num_stacked_tiles, stack_gap);
 }
