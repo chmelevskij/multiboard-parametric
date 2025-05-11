@@ -2,7 +2,7 @@
 x_cells = 8;
 y_cells = 6;
 num_stacked_tiles = 3;
-type = "core"; // side or corner
+type = "core"; // [side, core, corner]
 
 // eps = 0.01;
 
@@ -18,7 +18,7 @@ hole_rg_spiral_d=0.776;
 
 hole_sm_d = 6.069+0.025; // 7.5;
 
-stack_gap = 0.25; // Default gap between stacked tiles in mm
+stack_gap = 0.2; // Default gap between stacked tiles in mm
 
 // Single tile outer dimensions
 side_l = cell_size/(1+2*cos(45));
